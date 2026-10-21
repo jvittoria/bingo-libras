@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo LIBRAS</title>
+    <title>Bingo LIBRAS - EDM0400</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -53,33 +53,31 @@
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                <!-- Destaque Principal (Número Sorteado com fotos gigantes) -->
-                <div class="md:col-span-5 flex flex-col">
-                    <div class="bg-white p-6 rounded-2xl shadow-md border border-indigo-100 flex-1 flex flex-col items-center justify-center text-center">
-                        <span class="bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase mb-3">Último Sorteado</span>
-                        
-                        <!-- Painel do Sorteador Ampliado -->
-                        <div class="w-full min-h-[320px] bg-indigo-50/60 rounded-2xl p-6 my-2 flex items-center justify-center gap-4 border-2 border-indigo-100 shadow-inner" id="libras-display">
-                            <span class="text-slate-400 text-base font-medium">Clique no botão abaixo para sortear</span>
-                        </div>
-
-                        <button id="draw-btn" onclick="drawNextNumber()" class="w-full py-4 mt-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-extrabold text-lg shadow-md active:scale-95 transition">
-                            Sortear Próximo Número
-                        </button>
+            <!-- Destaque Principal Centralizado e Gigante -->
+            <div class="w-full max-w-3xl mx-auto">
+                <div class="bg-white p-8 rounded-3xl shadow-lg border border-indigo-100 flex flex-col items-center justify-center text-center">
+                    <span class="bg-indigo-50 text-indigo-700 px-5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4">Último Sorteado</span>
+                    
+                    <!-- Painel do Sorteador Ampliado GIGANTE -->
+                    <div class="w-full min-h-[360px] bg-indigo-50/60 rounded-2xl p-6 my-2 flex items-center justify-center gap-6 border-2 border-indigo-100 shadow-inner" id="libras-display">
+                        <span class="text-slate-400 text-base font-medium">Clique no botão abaixo para sortear</span>
                     </div>
-                </div>
 
-                <!-- Painel Geral de Chamada -->
-                <div class="md:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-bold text-slate-800 text-base">Painel Geral de Chamada</h3>
-                        <span id="drawn-count" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">
-                            0 / 75 Sorteados
-                        </span>
-                    </div>
-                    <div id="numbers-board" class="grid grid-cols-5 sm:grid-cols-8 gap-2 max-h-[420px] overflow-y-auto p-1"></div>
+                    <button id="draw-btn" onclick="drawNextNumber()" class="w-full max-w-md py-4 mt-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-extrabold text-xl shadow-md active:scale-95 transition">
+                        Sortear Próximo Número
+                    </button>
                 </div>
+            </div>
+
+            <!-- Painel Geral de Chamada (Movido para baixo) -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-800 text-base">Painel Geral de Chamada</h3>
+                    <span id="drawn-count" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">
+                        0 / 75 Sorteados
+                    </span>
+                </div>
+                <div id="numbers-board" class="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-15 gap-2 max-h-[400px] overflow-y-auto p-1"></div>
             </div>
         </section>
 
@@ -93,6 +91,11 @@
                         <option value="4" selected>4 Cartelas</option>
                         <option value="6">6 Cartelas</option>
                         <option value="10">10 Cartelas</option>
+                        <option value="15">15 Cartelas</option>
+                        <option value="20">20 Cartelas</option>
+                        <option value="30">30 Cartelas</option>
+                        <option value="50">50 Cartelas</option>
+                        <option value="100">100 Cartelas</option>
                     </select>
                     <button onclick="generateCards()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold text-sm shadow">
                         Gerar Novas
@@ -113,19 +116,18 @@
     </footer>
 
     <script>
-        // Função para carregar os numerais em LIBRAS (Sorteador e Cartelas)
         function getLibrasRepresentation(num, isLarge = false) {
             const digits = num.toString().split('');
             
-            // Tamanho GIGANTE para o sorteador (isLarge = true) e normal para tabelas/cartelas
-            const imgSize = isLarge ? 'w-48 h-60' : 'w-8 h-10';
+            // Tamanho Super GIGANTE para o sorteador centralizado
+            const imgSize = isLarge ? 'w-56 h-72' : 'w-8 h-10';
             const containerStyle = isLarge 
-                ? 'p-3 bg-white rounded-2xl border-4 border-indigo-300 shadow-md' 
+                ? 'p-4 bg-white rounded-3xl border-4 border-indigo-300 shadow-lg' 
                 : 'p-0.5 bg-white rounded-lg border border-slate-200';
 
             return digits.map(d => `
                 <div class="flex items-center justify-center ${containerStyle}">
-                    <img src="libras/${d}.jpg" alt="LIBRAS ${d}" class="${imgSize} object-contain rounded-xl" onError="this.onerror=null;this.src='https://via.placeholder.com/150?text=${d}';" />
+                    <img src="libras/${d}.jpg" alt="LIBRAS ${d}" class="${imgSize} object-contain rounded-2xl" onError="this.onerror=null;this.src='https://via.placeholder.com/200?text=${d}';" />
                 </div>
             `).join('');
         }
@@ -159,7 +161,6 @@
 
             drawnNumbers.push(num);
 
-            // Injeta as imagens em tamanho gigante no sorteador
             document.getElementById('libras-display').innerHTML = getLibrasRepresentation(num, true);
 
             const cell = document.getElementById(`num-cell-${num}`);
