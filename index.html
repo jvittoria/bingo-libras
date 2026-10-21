@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo LIBRAS - EDM0400</title>
+    <title>Bingo LIBRAS</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
@@ -53,13 +54,14 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                <!-- Destaque Principal -->
+                <!-- Destaque Principal (Número Sorteado com fotos gigantes) -->
                 <div class="md:col-span-5 flex flex-col">
                     <div class="bg-white p-6 rounded-2xl shadow-md border border-indigo-100 flex-1 flex flex-col items-center justify-center text-center">
-                        <span class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold uppercase mb-4">Último Sorteado</span>
+                        <span class="bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase mb-3">Último Sorteado</span>
                         
-                        <div class="w-full min-h-[200px] bg-indigo-50/50 rounded-xl p-4 my-2 flex items-center justify-center gap-2 border border-indigo-100" id="libras-display">
-                            <span class="text-slate-400 text-sm font-medium">Clique no botão abaixo para sortear</span>
+                        <!-- Painel do Sorteador Ampliado -->
+                        <div class="w-full min-h-[320px] bg-indigo-50/60 rounded-2xl p-6 my-2 flex items-center justify-center gap-4 border-2 border-indigo-100 shadow-inner" id="libras-display">
+                            <span class="text-slate-400 text-base font-medium">Clique no botão abaixo para sortear</span>
                         </div>
 
                         <button id="draw-btn" onclick="drawNextNumber()" class="w-full py-4 mt-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-extrabold text-lg shadow-md active:scale-95 transition">
@@ -68,7 +70,7 @@
                     </div>
                 </div>
 
-                <!-- Painel Geral -->
+                <!-- Painel Geral de Chamada -->
                 <div class="md:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-slate-800 text-base">Painel Geral de Chamada</h3>
@@ -76,7 +78,7 @@
                             0 / 75 Sorteados
                         </span>
                     </div>
-                    <div id="numbers-board" class="grid grid-cols-5 sm:grid-cols-8 gap-2 max-h-[400px] overflow-y-auto p-1"></div>
+                    <div id="numbers-board" class="grid grid-cols-5 sm:grid-cols-8 gap-2 max-h-[420px] overflow-y-auto p-1"></div>
                 </div>
             </div>
         </section>
@@ -111,12 +113,19 @@
     </footer>
 
     <script>
+        // Função para carregar os numerais em LIBRAS (Sorteador e Cartelas)
         function getLibrasRepresentation(num, isLarge = false) {
             const digits = num.toString().split('');
-            const imgSize = isLarge ? 'w-20 h-24' : 'w-8 h-10';
+            
+            // Tamanho GIGANTE para o sorteador (isLarge = true) e normal para tabelas/cartelas
+            const imgSize = isLarge ? 'w-48 h-60' : 'w-8 h-10';
+            const containerStyle = isLarge 
+                ? 'p-3 bg-white rounded-2xl border-4 border-indigo-300 shadow-md' 
+                : 'p-0.5 bg-white rounded-lg border border-slate-200';
+
             return digits.map(d => `
-                <div class="bg-white p-0.5 rounded-lg border border-slate-200 flex items-center justify-center">
-                    <img src="libras/${d}.jpg" alt="${d}" class="${imgSize} object-contain rounded" onError="this.onerror=null;this.src='https://via.placeholder.com/80?text=${d}';" />
+                <div class="flex items-center justify-center ${containerStyle}">
+                    <img src="libras/${d}.jpg" alt="LIBRAS ${d}" class="${imgSize} object-contain rounded-xl" onError="this.onerror=null;this.src='https://via.placeholder.com/150?text=${d}';" />
                 </div>
             `).join('');
         }
@@ -150,6 +159,7 @@
 
             drawnNumbers.push(num);
 
+            // Injeta as imagens em tamanho gigante no sorteador
             document.getElementById('libras-display').innerHTML = getLibrasRepresentation(num, true);
 
             const cell = document.getElementById(`num-cell-${num}`);
@@ -167,7 +177,7 @@
         function resetGame() {
             maxNum = parseInt(document.getElementById('max-number').value);
             drawnNumbers = [];
-            document.getElementById('libras-display').innerHTML = '<span class="text-slate-400 text-sm font-medium">Clique no botão abaixo para sortear</span>';
+            document.getElementById('libras-display').innerHTML = '<span class="text-slate-400 text-base font-medium">Clique no botão abaixo para sortear</span>';
             initBoard();
         }
 
